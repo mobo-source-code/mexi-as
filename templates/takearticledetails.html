@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+<link rel="stylesheet" href="{% static 'css/add_article.css' %}">
+
+
+<div class="container main">
+    <div class="ui labeled icon left vertical menu side">
+        <div class="item logo-img">
+        <img class="ui mini centered image" src="{% static 'img/logo-small.png' %}">
+        </div>
+        <a href="{% url 'addarticle' %}" class="item"> 
+            <i class="plus square icon"></i>
+            Ajouter Article
+        </a>
+        <a href="{% url 'addfourni' %}" class="item"> 
+            <i class="plus square icon"></i>
+            Ajouter Fournisseurs
+        </a>
+        <a href="{% url 'fournilist' %}" class="item"> 
+            <i class="plus square icon"></i>
+            Liste Fournisseurs
+        </a>
+        <a href="{% url 'articleslist' %}" class="item">
+            <i class="list icon"></i>
+            Liste des Articles
+        </a>
+        <a href="{% url 'takearticle' %}" class="item">
+            <i class="minus circle icon"></i>
+            Prélévement Article
+        </a>
+        <a href="{% url 'takelist' %}" class="item">
+            <i class="list icon"></i>
+            Liste des Prélévements
+        </a>
+        <a href="{% url 'feedarticle' %}" class="item">
+            <i class="plus square icon"></i>
+            Ajout au Stock
+        </a>
+        <a class="item">
+            <i class="power off icon"></i>
+            Déconnection
+        </a>
+    </div>
+    <div class="topbar">
+        <div class="ui teal four item inverted menu top">
+        <a class="item">
+            <div class="ui icon input">
+                <input type="text" placeholder="Chercher...">
+                <i class="search icon"></i>
+            </div>
+        </a>
+        <a class="right item">
+            <div class="ui yellow image label">
+                <img src="{% static 'img/person.png' %}">
+                {{user.username}}
+                <div class="detail">Connecté</div>
+            </div>
+        </a>
+      </div>
+    </div>
+    <div class="site-content">
+
+        <form class="ui form" method="post">
+            {% csrf_token %}
+            <div class="field">
+              {{formset}}
+            </div>
+            <button class="ui teal button" type="submit">
+                <i class="plus icon"></i>
+                Ajouter Article
+            </button>
+          </form>
+    </div>
+</div>
+
+
+
+
+{% endblock content %}

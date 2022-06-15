@@ -1,0 +1,44 @@
+.top {
+    margin: 0 !important;
+    border-radius: 0 !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    height: 5rem !important;
+}
+
+.topbar {
+    margin-left: 18rem;
+}
+.side {
+    height: 100vh;
+    position: fixed;
+    width: 18rem;
+    background: teal !important;
+    border-radius: 0 !important;
+}
+
+.logo-img {
+    display: flex !important;
+    height: 10rem;
+    align-items: center;
+    justify-content: center;
+}
+
+img {
+    height: 100px;
+    width: 100px;
+}
+
+a.item {
+    color: white !important; 
+    font-size: 1rem;
+    font-weight: bold; 
+}
+
+a i {
+    margin-left: 10px;
+}
+
+.site-content {
+    margin-left: 18.5rem;
+}

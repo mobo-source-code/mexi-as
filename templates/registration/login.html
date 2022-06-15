@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+
+    <div class="ui padded grid main">
+        <div class="centered center aligned middle aligned six wide column">
+            <h2 class="ui teal image header">
+                Se connecter à la session
+            </h2>
+            <form method="post" class="ui form">
+                {% csrf_token %}
+               
+                    <div class="field">
+                        <div class="ui left icon input">
+                            <i class="user icon"></i>
+                            <input type="text" name="username" placeholder="Nom d'utilisateur">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui left icon input">
+                            <i class="lock icon"></i>
+                            <input type="password" name="password" placeholder="Password">
+                        </div>
+                    </div>
+                    <button class="ui fluid large teal submit button" type="submit">Se connecter</button>
+                    {% if form.errors %}
+                        <div class="ui error message">Les identifiants ne sont pas correctes, veuillez contacter le support</div>
+                    {% endif %}
+                    
+            </form>
+            <div class="ui message">
+                Vous n'avez pas de compte ?
+                <a href="{% url 'signup' %}">Créer un Compte</a>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+<link rel="stylesheet" href="{% static 'css/article_list.css' %}">
+
+<div class="container main">
+    <div class="ui labeled icon left vertical menu side">
+        <div class="item logo-img">
+        <img class="ui mini centered image" src="{% static 'img/logo-small.png' %}">
+        </div>
+        <a href="{% url 'addarticle' %}" class="item"> 
+            <i class="plus square icon"></i>
+            Ajouter Article
+        </a>
+        <a href="{% url 'addfourni' %}" class="item"> 
+            <i class="plus square icon"></i>
+            Ajouter Fournisseurs
+        </a>
+        <a href="{% url 'fournilist' %}" class="item"> 
+            <i class="plus square icon"></i>
+            Liste Fournisseurs
+        </a>
+        <a href="{% url 'articleslist' %}" class="item">
+            <i class="list icon"></i>
+            Liste des Articles
+        </a>
+        <a href="{% url 'takearticle' %}" class="item">
+            <i class="minus circle icon"></i>
+            Prélévement Article
+        </a>
+        <a href="{% url 'takelist' %}" class="item">
+            <i class="list icon"></i>
+            Liste des Prélévements
+        </a>
+        <a href="{% url 'feedarticle' %}" class="item">
+          <i class="plus square icon"></i>
+          Ajout au Stock
+      </a>
+        <a class="item">
+            <i class="power off icon"></i>
+            Déconnection
+        </a>
+    </div>
+    <div class="topbar">
+        <div class="ui teal four item inverted menu top">
+        <a class="item">
+            <div class="ui icon input">
+                <input type="text" placeholder="Chercher...">
+                <i class="search icon"></i>
+            </div>
+        </a>
+        <a class="right item">
+            <div class="ui yellow image label">
+                <img src="{% static 'img/person.png' %}">
+                {{user.username}}
+                <div class="detail">Connecté</div>
+            </div>
+        </a>
+      </div>
+    </div>
+    
+    <div class="site-content tabl">
+        {% if user.is_superuser %}
+        <table class="ui small celled table">
+            <thead>
+              <tr><th>Nom</th>
+              <th>Adresse</th>
+              <th>Numéro de Téléphone</th>
+              <th>Modifier</th>
+            </tr></thead>
+            <tbody>
+                {% for f in fournil %}
+              <tr>
+                <td data-label="Article">{{f.nom}}</td>
+                <td data-label="Classification">{{f.adresse}}</td>
+                <td data-label="Prix / Unité">{{f.tel}}</td>
+                <td data-label="Fournisseurs">
+                    <a href="#" class="ui icon button">
+                        <i class="pen square icon"></i>
+                    </a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+            <tfoot class="full-width">
+            <tr>
+                <th class="tah" colspan="6">
+                  <div class="ui right floated pagination menu">
+                    <a class="icon item tabf">
+                      <i class="arrow left icon"></i>
+                    </a>
+                    <a class="item tabf">1</a>
+                    <a class="item tabf">2</a>
+                    <a class="item tabf">3</a>
+                    <a class="icon item tabf">
+                      <i class="arrow right icon"></i>
+                    </a>
+                  </div>
+                  <div class="ui teal tag labels tah">
+                    <a class="ui label">
+                      Valeur en stock : {{val_en_stock.prix__sum}} DHS
+                    </a>
+                  </div>
+                </th>
+            </tr>
+            </tfoot>
+          </table>
+          {% else %}
+          <table class="ui celled table">
+            <thead>
+              <tr><th>Name</th>
+              <th>Age</th>
+              <th>Job</th>
+            </tr></thead>
+            <tbody>
+              <tr>
+                <td data-label="Name">James</td>
+                <td data-label="Age">24</td>
+                <td data-label="Job">Engineer</td>
+              </tr>
+              <tr>
+                <td data-label="Name">Jill</td>
+                <td data-label="Age">26</td>
+                <td data-label="Job">Engineer</td>
+              </tr>
+              <tr>
+                <td data-label="Name">Elyse</td>
+                <td data-label="Age">24</td>
+                <td data-label="Job">Designer</td>
+              </tr>
+            </tbody>
+          </table>
+          {% endif %}
+    </div>
+</div>
+
+
+{% endblock content %}
