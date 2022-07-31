@@ -67,19 +67,12 @@
             <thead>
               <tr><th>Articles</th>
               <th>Quantité Sorti</th>
-              <th>Poste</th>
-              <th>Supprimer</th>
             </tr></thead>
             <tbody>
                 {% for d in taked %}
               <tr>
                 <td data-label="Article">{{d.articles}}</td>
                 <td data-label="Classification">{{d.qte}}</td>
-                <td data-label="Fournisseurs">
-                    <a href="#" class="ui icon button">
-                        <i class="download icon"></i>
-                    </a>
-                </td>
               </tr>
               {% endfor %}
             </tbody>
