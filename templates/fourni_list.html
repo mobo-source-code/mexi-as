@@ -38,10 +38,10 @@
           <i class="plus square icon"></i>
           Ajout au Stock
       </a>
-        <a class="item">
-            <i class="power off icon"></i>
-            Déconnection
-        </a>
+      <a href="{% url 'logout' %}" class="item">
+        <i class="power off icon"></i>
+        Déconnection
+    </a>
     </div>
     <div class="topbar">
         <div class="ui teal four item inverted menu top">
@@ -96,11 +96,6 @@
                     <a class="item tabf">3</a>
                     <a class="icon item tabf">
                       <i class="arrow right icon"></i>
-                    </a>
-                  </div>
-                  <div class="ui teal tag labels tah">
-                    <a class="ui label">
-                      Valeur en stock : {{val_en_stock.prix__sum}} DHS
                     </a>
                   </div>
                 </th>

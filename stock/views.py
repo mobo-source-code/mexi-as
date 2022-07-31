@@ -1,9 +1,12 @@
+from msilib import type_key
 from multiprocessing import context
+from django.contrib.auth.decorators import login_required
 from django.forms import inlineformset_factory
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.db.models import Sum
 from .forms import FeedingForm, AddFourniForm, ArticleForm, TakingForm
+from django.core.paginator import Paginator
 
 # PDF download needed imports *********************
 from django.http import FileResponse
@@ -22,12 +25,13 @@ Feeding)
 
 
 
- 
+@login_required 
 def home(request):
     return render(request, 'home.html')
 
 
 # Article module ------------------------------------------------------------------------
+@login_required
 def addarticle(request):
     if request.method == "POST":
         form = ArticleForm(request.POST)
@@ -51,7 +55,7 @@ def addarticle(request):
 
 
 
-
+@login_required
 def articleslist(request):
     articles = Article.objects.all()
 
@@ -76,7 +80,7 @@ def articleslist(request):
 
 
 # Take Article module ------------------------------------------------------------------------
-
+@login_required
 def takearticle(request):
     taking = None
     if request.method == "POST":
@@ -97,10 +101,10 @@ def takearticle(request):
     }
     return render(request, 'takearticle.html', context)
 
-
+@login_required
 def notAuto(request):
     return render(request, "not_autho.html")
-
+@login_required
 def takearticledetails(request, id):
     taking = Taking.objects.get(id=id)
     ArticleFormset = inlineformset_factory(Taking, TakingArticles, fields=('articles', 'qte',), can_delete=False, extra=1)
@@ -128,10 +132,15 @@ def takearticledetails(request, id):
     formset = ArticleFormset(instance=taking)
     return render(request, 'takearticledetails.html', {'formset': formset})
 
+@login_required
 def takelist(request):
     takelist = Taking.objects.all()
+    # page = request.GET.get('page', 1)
+    # paginator = Paginator(take, 7)
+    # takelist = paginator.page(page) 
     return render(request, "takelist.html", {"takelist": takelist})
 
+@login_required
 def takedetails(request, id):
     take = Taking.objects.get(id=id)
     takedetails = TakingArticles.objects.filter(taking=take)
@@ -141,6 +150,7 @@ def takedetails(request, id):
 
 # Article module ------------------------------------------------------------------------
 
+@login_required
 def feedarticle(request):
     if request.method == "POST":
         form = FeedingForm(request.POST)
@@ -168,7 +178,7 @@ def feedarticle(request):
     }
     return render(request, "fedform.html", context)
 
-
+@login_required
 def addfourni(request):
     if request.method == "POST":
         form = AddFourniForm(request.POST)
@@ -184,6 +194,7 @@ def addfourni(request):
     }
     return render(request, "ajout_fourni.html", context) 
 
+@login_required
 def fournilist(request):
     fournil = Fournisseur.objects.all()
     context = {

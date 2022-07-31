@@ -42,3 +42,7 @@ a i {
 .site-content {
     margin-left: 18.5rem;
 }
+
+.main {
+    height: 100vh;
+}
