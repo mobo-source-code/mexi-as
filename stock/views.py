@@ -103,6 +103,7 @@ def takearticledetails(request, id):
     ArticleFormset = inlineformset_factory(Taking, TakingArticles, fields=('articles', 'qte',), can_delete=False, extra=1)
     formset = ArticleFormset(request.POST, instance=taking)
     total_value_of_taking = []
+    price_of_all_takings = None
     if formset.is_valid():
         for f in formset:
             article = f.cleaned_data['articles']
@@ -131,7 +132,8 @@ def takelist(request):
     # page = request.GET.get('page', 1)
     # paginator = Paginator(take, 7)
     # takelist = paginator.page(page) 
-    return render(request, "takelist.html", {"takelist": takelist})
+    price_of_all_takings = Taking.objects.aggregate(Sum('total_value'))
+    return render(request, "takelist.html", {"takelist": takelist, 'pr': price_of_all_takings})
 
 @login_required
 def takedetails(request, id):
