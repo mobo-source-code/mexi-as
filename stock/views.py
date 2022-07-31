@@ -1,4 +1,3 @@
-from msilib import type_key
 from multiprocessing import context
 from django.contrib.auth.decorators import login_required
 from django.forms import inlineformset_factory
@@ -8,12 +7,6 @@ from django.db.models import Sum
 from .forms import FeedingForm, AddFourniForm, ArticleForm, TakingForm
 from django.core.paginator import Paginator
 
-# PDF download needed imports *********************
-from django.http import FileResponse
-import io
-from reportlab.pdfgen import canvas
-from reportlab.lib.units import inch
-from reportlab.lib.pagesizes import letter
 
 
 
