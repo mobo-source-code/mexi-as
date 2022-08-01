@@ -4,6 +4,7 @@ from users.models import User
 
 
 CLASSI = (
+        ('Superette', 'Superette'),
         ('Global', 'Global'),
         ('Stock', 'Stock'),
         ('Fruit et Légumes', 'Fruit et Légumes'),
@@ -32,6 +33,7 @@ POSTE = (
     ('GRILLADE', 'GRILLADE'),
     ('TAFERNOUTE', 'TAFERNOUTE'),
     ('SNACK', 'SNACK'),
+    ('Superette', 'Superette')
     )
 
 
