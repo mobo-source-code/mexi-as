@@ -3,7 +3,9 @@
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/home.css' %}">
-{% if user.is_authenticated %}
+<link rel="stylesheet" href="{% static 'css/add_article.css' %}">
+
+
 <div class="container main">
     <div class="ui labeled icon left vertical menu side">
         <div class="item logo-img">
@@ -63,22 +65,22 @@
         </a>
       </div>
     </div>
-    
     <div class="site-content">
-        
+
+        <form class="ui form" method="post">
+            {% csrf_token %}
+            <div class="field">
+              {{formset}}
+            </div>
+            <button class="ui teal button" type="submit">
+                <i class="plus icon"></i>
+                Ajouter Article
+            </button>
+          </form>
     </div>
 </div>
-    
-{% else %}
-<div class="container main">
-    <h1>
-        <a href="{% url 'login' %}">Connectez-vous</a> <br/>
-        Oû <br/>
-        <a href="{% url 'signup' %}">Créer un compte</a>
-    </h1>
-</div>
-{% endif %}
 
-    
+
+
 
 {% endblock content %}

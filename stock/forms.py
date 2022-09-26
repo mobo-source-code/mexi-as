@@ -6,7 +6,7 @@ from .models import Article, Feeding, Fournisseur, Taking
 class FeedingForm(ModelForm):
     class Meta:
         model = Feeding
-        fields = ('article', 'qté', 'prix')
+        fields = ('br', 'fournisseur')
     
 class AddFourniForm(ModelForm):
     class Meta:

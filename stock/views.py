@@ -1,22 +1,39 @@
 from multiprocessing import context
+from re import template
+from urllib import response
 from django.contrib.auth.decorators import login_required
 from django.forms import inlineformset_factory
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.db.models import Sum
 from .forms import FeedingForm, AddFourniForm, ArticleForm, TakingForm
-from django.core.paginator import Paginator
 
+from django.views.generic import View
+
+from io import BytesIO
+from django.http import HttpResponse
+from django.template.loader import get_template
+
+from xhtml2pdf import pisa
 
 
 
 # Database Modeles needed *********************
-from .models import (Article, Fournisseur, 
+from .models import (Article, FeedingArticles, Fournisseur, 
 Taking, 
 TakingArticles,
 Feeding)
 
 
+
+def render_to_pdf(template_src, context_dict={}):
+    template = get_template(template_src)
+    html = template.render(context_dict)
+    result = BytesIO()
+    pdf = pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")), result)
+    if not pdf.err:
+        return HttpResponse(result.getvalue(), content_type='application/pdf')
+    return None
 
 @login_required 
 def home(request):
@@ -147,31 +164,88 @@ def takedetails(request, id):
 
 @login_required
 def feedarticle(request):
+    feeding = None
     if request.method == "POST":
         form = FeedingForm(request.POST)
         if form.is_valid():
             feeding = Feeding.objects.create(user=request.user, 
-                                                article=form.cleaned_data["article"],
-                                                qté=form.cleaned_data["qté"],
-                                                prix=form.cleaned_data["prix"]
+                                                br=form.cleaned_data["br"],
+                                                fournisseur=form.cleaned_data["fournisseur"]
                                                 )
-            arti = Article.objects.get(nom=form.cleaned_data["article"])
-            arti.prix = form.cleaned_data["prix"]
-            previous_quantity = arti.qte
-            new_quantity = previous_quantity + form.cleaned_data["qté"]
-            arti.qte = new_quantity
-            arti.single_value = new_quantity * form.cleaned_data["prix"]
-            arti.save()
             print("fed success")
-            return redirect("home")
+            feed_id = feeding.id
+            return redirect("feedarticlesdetails", id=feed_id)
         else:
             print(form.errors)
     else:
         form = FeedingForm()
     context = {
+        "feeding": feeding,
         "form" : form
     }
     return render(request, "fedform.html", context)
+
+@login_required
+def feedList(request):
+    feeding = Feeding.objects.all()
+    for f in feeding : 
+        print(f.date_feed)
+    price_of_all_takings = Feeding.objects.aggregate(Sum('total_value'))
+    return render(request, "feedlist.html", {"feeding": feeding, "pr": price_of_all_takings})
+
+@login_required
+def addFeedArticles(request, id):
+    feeding = Feeding.objects.get(id=id)
+    FeedArticleFormset = inlineformset_factory(Feeding, FeedingArticles, fields=('articles', 'prix_unitaire', 'qte',), can_delete=False, extra=1)
+    formset = FeedArticleFormset(request.POST, instance=feeding)
+    total_value_of_feeding = []
+    if formset.is_valid():
+        for f in formset: 
+            article = f.cleaned_data['articles']
+            quantite = f.cleaned_data['qte']
+            prix = f.cleaned_data['prix_unitaire']
+            selected_article = Article.objects.get(nom=article)
+            selected_article.qte = selected_article.qte + quantite
+            selected_article.prix = prix 
+            selected_article.single_value = quantite * prix 
+            selected_article.save()
+            selected_article_price = selected_article.prix
+            total_value_of_feed_per_article = selected_article_price * quantite
+            total_value_of_feeding.append(total_value_of_feed_per_article)
+        formset.save()
+        total_value = sum(total_value_of_feeding)
+        feeding.total_value = total_value
+        feeding.save()
+        return redirect('feedarticlesdetails', id=id)
+    formset = FeedArticleFormset(instance=feeding)
+    return render(request, 'feedarticlesdetails.html', {'formset': formset}) 
+
+
+def generate_pdf(request, id, *args, **kwargs):
+    feeding = Feeding.objects.get(id=id)
+    farticles = FeedingArticles.objects.filter(feeding=feeding)
+    print(farticles)
+    template = get_template('br.html')
+    context = {
+        "br" : feeding.br,
+        "fournisseur": feeding.fournisseur,
+        "total_value": feeding.total_value,
+        "articles": farticles
+    }
+    html = template.render(context)
+    pdf = render_to_pdf('br.html', context)
+    if pdf: 
+        response = HttpResponse(pdf, content_type='application/pdf')
+        filename = "BR_%s.pdf" %(feeding.br)
+        content = "inline; filename='%s'" %(filename)
+        download = request.GET.get("download")
+        if download:
+            content = "attachement; filename='%s'" %(filename)
+        response['Content-Disposition'] = content
+        return response
+    return HttpResponse("Not Found")
+
+
 
 @login_required
 def addfourni(request):

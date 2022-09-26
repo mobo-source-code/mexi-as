@@ -11,6 +11,9 @@ takedetails,
 addfourni,
 fournilist,
 feedarticle,
+addFeedArticles,
+feedList,
+generate_pdf,
 notAuto )
 
 
@@ -30,6 +33,9 @@ urlpatterns = [
 
 	# Feed Articles Routes
 	path('feedarticle', feedarticle, name='feedarticle'),
+	path('feedarticlesdetails/<int:id>/', addFeedArticles, name='feedarticlesdetails'),
+	path('feedlist', feedList, name='feedlist'),
+	path('generatebr/<int:id>/', generate_pdf, name='generatebr'),
 
 	#Add Founi
 	path('addfourni', addfourni, name='addfourni'),

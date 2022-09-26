@@ -39,6 +39,10 @@
             <i class="plus square icon"></i>
             Ajout au Stock
         </a>
+        <a href="{% url 'feedlist' %}" class="item">
+            <i class="list icon"></i>
+            Liste des Récéptions
+        </a>
         <a href="{% url 'logout' %}" class="item">
             <i class="power off icon"></i>
             Déconnection
@@ -70,7 +74,7 @@
             </div>
             <button class="ui teal button" type="submit">
                 <i class="plus icon"></i>
-                Ajouter au stock
+                Ajouter les articles de la réception
             </button>
           </form>
     </div>

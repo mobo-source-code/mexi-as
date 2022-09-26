@@ -39,9 +39,9 @@
         Ajout au Stock
     </a>
     <a href="{% url 'feedlist' %}" class="item">
-      <i class="list icon"></i>
-      Liste des Récéptions
-  </a>
+        <i class="list icon"></i>
+        Liste des Récéptions
+    </a>
     <a href="{% url 'logout' %}" class="item">
       <i class="power off icon"></i>
       Déconnection
@@ -68,18 +68,28 @@
     <div class="site-content tabl">
         <table class="ui small celled table">
             <thead>
-              <tr><th>Poste</th>
-              <th>Sorti par</th>
+              <tr><th>Bon de Réception N°</th>
+              <th>Fourniseeur</th>
+              <th>Date</th>
+              <th>Valeur Total</th>
               <th>Voir détails</th>
+              <th>Imprimer Bon</th>
             </tr></thead>
             <tbody>
-                {% for l in takelist %}
+                {% for l in feeding %}
               <tr>
-                <td data-label="Article">{{l.poste}}</td>
-                <td data-label="Classification">{{l.total_value}}</td>
+                <td data-label="Bon de réception">{{l.br}}</td>
+                <td data-label="Fournisseur">{{l.fournisseur}}</td>
+                <td data-label="Date">{{l.date_feed|date:"d M, Y"}}</td>
+                <td data-label="Date">{{l.total_value}}</td>
                 <td data-label="Fournisseurs">
-                    <a href="{% url 'takedetails' l.id %}" class="ui icon button">
+                    <a href="{% url 'feedarticlesdetails' l.id %}" class="ui icon button">
                         <i class="eye icon"></i>
+                    </a>
+                </td>
+                <td data-label="Fournisseurs">
+                    <a href="{% url 'generatebr' l.id %}" class="ui icon button">
+                        <i class="download icon"></i>
                     </a>
                 </td>
               </tr>
@@ -88,20 +98,9 @@
             <tfoot class="full-width">
             <tr>
                 <th class="tah" colspan="6">
-                  <div class="ui right floated pagination menu">
-                    <a class="icon item tabf">
-                      <i class="arrow left icon"></i>
-                    </a>
-                    <a class="item tabf">1</a>
-                    <a class="item tabf">2</a>
-                    <a class="item tabf">3</a>
-                    <a class="icon item tabf">
-                      <i class="arrow right icon"></i>
-                    </a>
-                  </div>
                   <div class="ui teal tag labels tah">
                     <a class="ui label">
-                      Valeur total des prélévements : {{pr.total_value__sum}} DHS
+                      Valeur total des achats : {{pr.total_value__sum}}
                     </a>
                   </div>
                 </th>
