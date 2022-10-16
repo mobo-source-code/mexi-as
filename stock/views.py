@@ -16,6 +16,8 @@ from django.template.loader import get_template
 
 from xhtml2pdf import pisa
 
+from django.db.models import Q
+
 
 
 # Database Modeles needed *********************
@@ -82,10 +84,18 @@ def articleslist(request):
 
     total_value = sum(single_values)
 
+    query = request.GET.get('q')
+    print(query)
+    filtered_articles = None
+    if query:
+        look_for = (Q(nom__icontains=query))
+        filtered_articles = Article.objects.filter(look_for) 
+    if filtered_articles is not None:
+        articles = filtered_articles
+
 
     context = {"articles": articles,
-                "total_value": total_value,
-            }
+                "total_value": total_value}
     return render(request, "article_list.html", context)
 
 
@@ -148,8 +158,34 @@ def takelist(request):
     takelist = Taking.objects.all()
     # page = request.GET.get('page', 1)
     # paginator = Paginator(take, 7)
-    # takelist = paginator.page(page) 
-    price_of_all_takings = Taking.objects.aggregate(Sum('total_value'))
+    # takelist = paginator.page(page)
+
+    if request.method == "POST":
+        # if 'date-filter' in request.POST:
+        #     startdate=request.POST.get('startdate')
+        #     enddate = request.POST.get('enddate')
+        #     print(startdate, enddate)
+        #     search_result = Taking.objects.filter(made_on__range=(startdate, enddate))
+        #     print(search_result)
+        #     takelist = search_result
+        
+        # if 'post-filter' in request.POST:
+        #     poste = request.POST.get('postname')
+        #     print(poste)
+        #     filter_result = Taking.objects.filter(poste=poste)
+        #     print(filter_result)
+        #     takelist = filter_result
+        
+        if 'cross-filter' in request.POST: 
+            startdate=request.POST.get('startdate')
+            enddate = request.POST.get('enddate')
+            poste = request.POST.get('postname')
+            print(startdate, enddate, poste)
+            cross_result = Taking.objects.filter(made_on__range=(startdate, enddate), poste=poste)
+            takelist = cross_result
+
+     
+    price_of_all_takings = takelist.aggregate(Sum('total_value'))
     return render(request, "takelist.html", {"takelist": takelist, 'pr': price_of_all_takings})
 
 @login_required
@@ -188,9 +224,17 @@ def feedarticle(request):
 @login_required
 def feedList(request):
     feeding = Feeding.objects.all()
+    search_result=None
+    if request.method == "POST" : 
+        startdate=request.POST.get('startdate')
+        enddate = request.POST.get('enddate')
+        print(startdate, enddate)
+        search_result = Feeding.objects.filter(date_feed__range=(startdate, enddate))
+        print(search_result)
+        feeding = search_result
     for f in feeding : 
-        print(f.date_feed)
-    price_of_all_takings = Feeding.objects.aggregate(Sum('total_value'))
+        print(f.date_feed)    
+    price_of_all_takings = feeding.aggregate(Sum('total_value'))
     return render(request, "feedlist.html", {"feeding": feeding, "pr": price_of_all_takings})
 
 @login_required

@@ -66,6 +66,21 @@
     </div>
     
     <div class="site-content tabl">
+      <form method="POST">
+        {% csrf_token %}
+        <div class="ui input date">
+          Date de début : 
+          <input type="date" name="startdate" placeholder="Date de début"/>
+        </div>
+        <div class="ui input date">
+          Date de fin : 
+          <input type="date" name="enddate" placeholder="Date de fin"/>
+        </div>
+        <input type="submit" value="Chercher" class="ui button" />
+      </form>
+      
+      
+      <hr/>
         <table class="ui small celled table">
             <thead>
               <tr><th>Bon de Réception N°</th>

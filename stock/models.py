@@ -3,6 +3,7 @@ import uuid
 from users.models import User
 
 
+
 CLASSI = (
         ('Superette', 'Superette'),
         ('Global', 'Global'),

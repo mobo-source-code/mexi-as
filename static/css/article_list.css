@@ -14,3 +14,29 @@
 .tah {
     margin-top: 0.6rem;
 }
+
+.date {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+.post-form {
+    display: flex;
+    align-items: center;
+    width: 50%;
+    margin-left: 10px;
+}
+
+.dropdwn {
+    flex-grow: 1;
+}
+
+.send-button {
+    margin-top: 7px;
+    margin-left: 20px;
+}
+
+.end-btn {
+    margin-left: 10px;
+}

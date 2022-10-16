@@ -50,10 +50,14 @@
     <div class="topbar">
         <div class="ui teal four item inverted menu top">
         <a class="item">
+          <form method="GET" action="{% url 'articleslist' %}">
             <div class="ui icon input">
-                <input type="text" placeholder="Chercher...">
+              <input type="text" placeholder="Chercher..." name="q">
+              <button type="submit" class="ui icon button">
                 <i class="search icon"></i>
+              </button>
             </div>
+          </form>
         </a>
         <a class="right item">
             <div class="ui yellow image label">

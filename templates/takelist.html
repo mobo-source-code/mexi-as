@@ -66,10 +66,39 @@
     </div>
     
     <div class="site-content tabl">
+      <form method="POST">
+        {% csrf_token %}
+        <div class="ui input date">
+          Date de début : 
+          <input type="date" name="startdate" placeholder="Date de début"/>
+        </div>
+        <div class="ui input date">
+          Date de fin : 
+          <input type="date" name="enddate" placeholder="Date de fin"/>
+        </div>
+        <div class="ui form post-form">
+          <div class="field dropdwn">
+            <label>Filtrer Par Poste</label>
+            <select name="postname" class="ui search dropdwon">
+              <option value="CAFE">Café</option>
+              <option value="RESTAURENT">Restaurent</option>
+              <option value="LAITERIE">Laiterie</option>
+              <option value="GRILLADE">Grillade</option>
+              <option value="TAFERNOUTE">Tafernoute</option>
+              <option value="SNACK">Snack</option>
+              <option value="Superette">Superette</option>
+            </select>
+          </div>
+          <div class="send-button">
+            <input name="cross-filter" type="submit" value="Filtrer" class="ui button" />  
+          </div>
+        </div>
+      </form>
         <table class="ui small celled table">
             <thead>
               <tr><th>Poste</th>
-              <th>Sorti par</th>
+              <th>Valeur Total Par Poste</th>
+              <th>Date du prélévement</th>
               <th>Voir détails</th>
             </tr></thead>
             <tbody>
@@ -77,6 +106,7 @@
               <tr>
                 <td data-label="Article">{{l.poste}}</td>
                 <td data-label="Classification">{{l.total_value}}</td>
+                <td>{{l.made_on|date:"d M, Y"}}</td>
                 <td data-label="Fournisseurs">
                     <a href="{% url 'takedetails' l.id %}" class="ui icon button">
                         <i class="eye icon"></i>
